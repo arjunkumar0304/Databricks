@@ -111,3 +111,169 @@
 
 ---
 
+
+
+# Databricks dbutils & DBFS – README Document
+
+## 4. dbutils Command
+
+### 4.1 Overview of dbutils
+
+`dbutils` is a utility in Databricks used for:
+
+* File system operations
+* Running external notebooks
+* Managing libraries
+* Creating widgets (UI elements)
+* Handling secrets (not available in free edition)
+
+It simplifies automation and interaction with DBFS and Databricks runtime.
+
+### 4.2 Accessing dbutils in Notebooks
+
+You can access `dbutils` directly in any Databricks notebook:
+
+```python
+dbutils.fs.ls("/FileStore/")
+```
+
+In some rare cases:
+
+```python
+dbu = dbutils
+```
+
+### 4.3 Common dbutils Commands
+
+* `dbutils.fs` → File operations
+* `dbutils.notebook` → Run child notebooks
+* `dbutils.library` → Install/manage libraries
+* `dbutils.widgets` → Input widgets for notebooks
+
+### 4.4 dbutils.fs (File System Operations)
+
+* List files → `dbutils.fs.ls(path)`
+* Create folder → `dbutils.fs.mkdirs(path)`
+* Copy → `dbutils.fs.cp(src, dst)`
+* Move → `dbutils.fs.mv(src, dst)`
+* Delete → `dbutils.fs.rm(path, recurse=True)`
+
+### 4.5 dbutils.notebook (Notebook Operations)
+
+```python
+dbutils.notebook.run("/Workspace/childNotebook", 60)
+```
+
+Magic command:
+
+```python
+%run /Workspace/childNotebook
+```
+
+### 4.6 dbutils.library (Library Operations)
+
+```python
+dbutils.library.installPyPI("pandas")
+dbutils.library.restartPython()
+```
+
+Note: Limited support in Community Edition.
+
+### 4.7 dbutils.widgets (Widget Operations)
+
+Widgets create interactive elements in notebooks.
+
+* Text widget → `dbutils.widgets.text()`
+* Dropdown widget → `dbutils.widgets.dropdown()`
+* Combobox widget → `dbutils.widgets.combobox()`
+* Multiselect widget → `dbutils.widgets.multiselect()`
+
+<img width="1575" height="866" alt="Screenshot 2025-12-08 160240" src="https://github.com/user-attachments/assets/0649f2e5-e73f-4de0-a60b-035b53e0060e" />
+<img width="1508" height="240" alt="Screenshot 2025-12-08 160252" src="https://github.com/user-attachments/assets/0a3f05c6-be97-4aee-a78d-5843d6c3cfe3" />
+
+---
+
+## 5. Example Usages
+
+### 5.1 Uploading and Downloading Files
+
+* Upload via **Add Data** → `/FileStore/` path.
+* View uploaded files:
+
+```python
+dbutils.fs.ls("/FileStore/")
+```
+
+### 5.2 Running External Notebooks
+
+```python
+result = dbutils.notebook.run("/Workspace/Users/User/Child", 60)
+print(result)
+```
+
+### 5.3 Installing and Managing Libraries
+
+```python
+dbutils.library.installPyPI("numpy")
+```
+
+### 5.4 Interacting with Widgets
+
+```python
+dbutils.widgets.dropdown("country", "India", ["India", "USA", "UK"])
+print(dbutils.widgets.get("country"))
+```
+
+---
+
+## 6. Read and Write in DBFS Path
+
+### 6.1 Introduction to DBFS (Databricks File System)
+
+DBFS is a distributed file system on top of cloud storage used by Databricks.
+It supports storing data, notebooks, models, logs, and more.
+
+### 6.2 Overview of DBFS
+
+Common paths:
+
+* `/FileStore/` → Public files
+* `/mnt/` → Mounted cloud storage (not in free edition)
+* `dbfs:/` → URI-based DBFS path
+
+### 6.3 Mount Points
+
+Used to connect Azure Blob, ADLS, or S3 storage.
+(Not supported in Community Edition.)
+
+
+
+### 6.4 Reading Data from DBFS
+
+```python
+df = spark.read.csv("/FileStore/data.csv", header=True)
+df.show()
+```
+
+### 6.5 Reading CSV/Parquet Files
+
+CSV example:
+
+```python
+df = spark.read.option("header", "true").csv("/FileStore/files/sample.csv")
+```
+
+Parquet example:
+
+```python
+df = spark.read.parquet("/FileStore/parquet/")
+```
+
+### 6.6 Reading Other File Formats
+
+JSON:
+
+```python
+df = spark.read.json("/FileStore/json/")
+```
+
