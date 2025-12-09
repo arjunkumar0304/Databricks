@@ -277,3 +277,180 @@ JSON:
 df = spark.read.json("/FileStore/json/")
 ```
 
+# README: DBFS, Medallion Architecture, and Delta Lake
+
+---
+
+## **7. Writing Data to DBFS**
+
+### **7.1 Writing CSV/Parquet Files in Databricks**
+
+DBFS (Databricks File System) allows you to write data in multiple file formats easily using PySpark.
+
+---
+
+### **7.2 Commands for Writing CSV**
+
+```python
+# Writing CSV
+(df
+ .write
+ .mode("overwrite")          # overwrite, append, errorIfExists
+ .option("header", True)
+ .csv("/dbfs/FileStore/csv/output_data"))
+```
+
+---
+
+### **7.3 Commands for Writing Parquet**
+
+```python
+# Writing Parquet
+(df
+ .write
+ .mode("overwrite")
+ .parquet("/dbfs/FileStore/parquet/output_data"))
+```
+
+---
+
+### **7.4 Writing Other File Formats**
+
+#### **Write JSON**
+
+```python
+(df.write.mode("overwrite").json("/dbfs/FileStore/json/output_data"))
+```
+
+## **8. Medallion Architecture**
+
+A popular data engineering design pattern used in Databricks.
+
+---
+
+### **8.1 Introduction to Medallion Architecture**
+
+Medallion = Three-layer architecture:
+
+1. **Bronze Layer** – Raw data ingestion.
+2. **Silver Layer** – Cleaned + standardized data.
+3. **Gold Layer** – Business-level curated data.
+
+This architecture improves data quality step-by-step.
+
+---
+
+### **8.2 Use Cases and Applications**
+
+* ETL data pipelines
+* Data Warehousing
+* Machine Learning pipelines
+* BI dashboards
+* Slowly changing dimensions
+* Incremental processing
+* Streaming pipelines
+
+Bronze → Silver → Gold flow ensures reliability and quality.
+
+---
+
+## **9. Delta Lake (Theory)**
+
+Delta Lake is a storage layer that brings **ACID** transactions & reliability to data lakes.
+
+---
+
+### **9.1 Introduction to Delta Lake**
+
+Delta Lake stores data in Parquet + maintains a transaction log (`_delta_log`).
+It enables:
+
+* Version control
+* Schema enforcement
+* Time travel
+* Reliable reads/writes
+
+---
+
+### **9.2 ACID Transactions**
+
+ACID stands for:
+
+* A – Atomicity: Complete write happens or nothing happens
+
+* C – Consistency: Ensures data always remains valid
+
+* I – Isolation: Parallel writes do not corrupt data
+
+* D – Durability: Once data is written, it is safe and permanent
+
+
+---
+
+### **9.3 Time Travel**
+
+You can query old versions of a Delta table by:
+
+* Version number
+* Timestamp
+
+Example:
+
+```python
+df = spark.read.format("delta").option("versionAsOf", 3).load("/delta/table_path")
+```
+
+---
+
+### **9.4 Delta Table**
+
+A Delta table = Parquet files + transaction log.
+Stored at:
+
+```
+/_delta_log
+```
+
+Supports:
+
+* MERGE
+* UPDATE
+* DELETE
+* OPTIMIZE
+
+---
+
+### **9.5 Delta Log**
+
+The **_delta_log** folder stores JSON/Checkpoint files that record:
+
+* Changes
+* Commits
+* Schema updates
+* Transactions
+
+This enables ACID and time travel.
+
+---
+
+### **9.6 Usage and Benefits**
+
+Key benefits:
+
+* Reliable pipelines
+* Faster reads
+* Schema enforcement
+* Versioning/time travel
+* Transaction support
+* Scalable for batch + streaming
+
+---
+
+### **9.7 Schema Evolution**
+
+Schema Evolution means Delta Table automatically adapts to new columns, data types, or structure changes during write operations.
+
+
+
+
+
