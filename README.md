@@ -452,5 +452,95 @@ Schema Evolution means Delta Table automatically adapts to new columns, data typ
 
 
 
+## 10.1 Lakeflow Connect
+
+### 10.1.1 Upload Files
+
+* Allows you to upload CSV, JSON, Parquet, Excel files into Databricks.
+* Supports drag-and-drop or browse upload.
+
+### 10.1.2 Managed Connectors
+
+* Prebuilt connectors provided by Databricks.
+* Connect to cloud storage, databases, SaaS apps.
+* Fully managed and optimized.
+
+### 10.1.3 Standard Connectors
+
+* Basic connectors like JDBC, S3, ADLS.
+* You configure authentication and options manually.
+
+### 10.1.4 Data Formats
+
+* Supported formats: CSV, JSON, Parquet, Delta, ORC, Avro.
+* Delta is recommended for performance and ACID features.
+
+### 10.1.5 Migrate to Delta Table
+
+* Convert existing CSV/Parquet tables to Delta.
+* Uses `CONVERT TO DELTA` or rewrite using `format("delta")`.
+
+---
+
+## 10.2 Delta Lake
+
+### 10.2.1 Operations
+
+* CREATE, READ, WRITE, MERGE, UPDATE, DELETE.
+* Time travel using version or timestamp.
+
+### 10.2.2 Data Layout
+
+* **Liquid Clustering:** Auto-organizes data without partitions.
+* **Data Skipping:** Uses file stats to skip irrelevant data.
+* **Tune File Size:** Optimize file sizes using OPTIMIZE.
+* **Table Size:** Use DESCRIBE DETAIL.
+* **Partition Tables:** Improves filter performance.
+
+### 10.2.3 Schema Enforcement & Evolution
+
+* Enforcement: Ensures wrong schema data cannot be written.
+* Evolution: Allows adding new columns automatically.
+
+### 10.2.4 Table Features
+
+* **Change Data Feed (CDF):** Captures row changes.
+* **Table Constraints:** NOT NULL, CHECK constraints.
+* **Generated Columns:** Auto-calculated columns.
+* **Row Tracking:** Tracks row identifiers.
+* **Type Widening:** Allows safe datatype changes.
+
+---
+
+## 10.3 Structured Streaming
+
+* Real-time processing using micro-batch engine.
+* Supports Delta as sink & source.
+* Auto-recovery and fault tolerance.
+
+---
+
+## 10.4 Data Governance with Unity Catalog
+
+* Centralized governance for data, AI assets, models.
+* Fine‑grained permissions.
+* Secure sharing.
+
+---
+
+## 10.5 Unity Catalog
+
+* Logical structure: **Metastore → Catalog → Schema → Table**.
+* Manages permissions, lineage, auditing.
+
+---
+
+## 10.6 Catalog Explorer
+
+* GUI to browse tables, schemas, catalogs.
+* Shows metadata, preview, lineage.
+
+
+
 
 
