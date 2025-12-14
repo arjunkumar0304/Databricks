@@ -1,7 +1,6 @@
 # Databricks
 
 
-
 ## 1. Databricks
 
 ### 1.1 Workspace UI
