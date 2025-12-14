@@ -113,7 +113,6 @@
 
 
 
-# Databricks dbutils & DBFS – README Document
 
 ## 4. dbutils Command
 
@@ -277,7 +276,7 @@ JSON:
 df = spark.read.json("/FileStore/json/")
 ```
 
-# README: DBFS, Medallion Architecture, and Delta Lake
+
 
 ---
 
